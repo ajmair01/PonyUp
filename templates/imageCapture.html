@@ -1,0 +1,30 @@
+<div>
+	<x-ponyup-topbar></x-ponyup-topbar>
+	<div class="contents">
+        <div class="row">
+            <h2>Image Capture</h2>
+            <div class="row fieldset info" ng-show="hasGetUserMedia && !setupComplete && !cameraError && !cameraDenied">
+                <span>Please allow access to your camera. If you do not want the site to access your camera, you can deny access and upload an image instead.</span>
+            </div>
+            <div class="row fieldset error" ng-show="cameraError">
+                <span>There was an error accessing your camera: {{cameraErrorMsg}}</span>
+            </div>
+            <div class="row fieldset error" ng-show="cameraDenied">
+                <span>Camera access denied. You can upload an image below or go back to enter data manually.</span>
+            </div>
+            <div class="row" id="step1" ng-show="setupComplete">
+                <input type="file" capture="camera" accept="image/*" ng-show="!hasGetUserMedia">
+                <figure class="not-ready" ng-show="hasGetUserMedia && !pictureTaken">
+                    <video autoplay></video>
+                </figure>
+                <a ng-click="takePicture()" ng-show="hasGetUserMedia && !pictureTaken" class="button radius">Take Picture</a>
+            </div>
+            <div class="row" id="step2">
+                <figure>
+                    <canvas style="display: none"></canvas>
+                    <img src=""/>
+                </figure>
+            </div>
+        </div>
+    </div>
+</div>

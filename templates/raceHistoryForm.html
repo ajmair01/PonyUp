@@ -1,0 +1,41 @@
+<div>
+	<x-ponyup-topbar></x-ponyup-topbar>
+	<div class="contents">
+		<div class="row" ng-repeat="horse in horses" ng-show="horse.id == horseId">
+			<h2>#{{horse.id}} - {{horse.name}}'s Race History</h2>
+			<div class="row fieldset" ng-repeat="race in horse.history">
+				<div class="row">
+					<img class="small-img" src="img/race.png"/>
+					<h4>Race #{{race.id}}</h4>
+				</div>
+				<div class="row">
+					<div class="small-3 medium-3 large-3 columns">
+						<label for="race_{{race.id}}_dist">Distance:</label>
+						<input id="race_{{race.id}}_dist" type="text" ng-model="race.distance"/>
+					</div>
+					<div class="small-9 medium-9 large-2 columns">
+						<label for="race_{{race.id}}_dist_type">Measured In:</label>
+						<select id="race_{{race.id}}_dist_type" ng-model="race.dist_type" ng-options="opt.abbr as opt.name for opt in distTypeOptions">
+						</select>
+					</div>
+					<div class="small-6 medium-4 large-2 columns">
+						<label for="race_{{race.id}}_pos">Place:</label>
+						<input id="race_{{race.id}}_pos" type="text" ng-model="race.pos"/>
+					</div>
+					<div class="small-6 medium-4 large-3 columns">
+						<label for="race_{{race.id}}_behind">Lengths Behind:</label>
+						<input id="race_{{race.id}}_behind" type="text" ng-model="race.behind"/>
+					</div>
+					<div class="small-12 medium-4 large-2 columns">
+						<label for="race_{{race.id}}_winTime">Winning Time:</label>
+						<input id="race_{{race.id}}_winTime" type="text" ng-model="race.winTime"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<a ng-click="addRace()" class="button radius">Add Race</a>
+				<a ng-click="save()" class="button radius">Save</a>
+			</div>
+		</div>
+	</div>
+</div>

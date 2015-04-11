@@ -1,0 +1,18 @@
+<div>
+	<x-ponyup-topbar></x-ponyup-topbar>
+	<div class="contents">
+		<div class="row">
+			<h2>Saved Races</h2>
+			<div class="row fieldset" ng-repeat="race in races" >
+				<h4>{{race}}</h4>
+				<a class="button radius small small-8 medium-1 columns" href="#/horses/{{race}}">Show Race</a>
+				<a class="button radius small small-8 medium-1 columns" href="#/results/{{race}}">Results</a>
+				<a class="button radius small alert small-8 medium-2 columns" ng-click="removeRace(race)">Remove Race</a>
+				<div class="medium-8 columns"></div>
+			</div>
+		</div>
+		<div class="row">
+			<a ng-click="createNewRace()" class="button radius">Create New Race</a>
+		</div>
+	</div>
+</div>
