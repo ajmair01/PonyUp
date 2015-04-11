@@ -29,7 +29,9 @@
                     <figure class="not-ready">
                         <video autoplay></video>
                     </figure>
-                    <a ng-click="takePicture()" class="button radius">Take Picture</a>
+                    <a ng-click="takePicture()" class="button radius">
+                        <img class="small-img" src="img/camera_white.png" style="width: 2rem">
+                    </a>
                 </div>
             </div>
             <div class="row fieldset" id="step2" ng-show="pictureTaken || pictureUploaded">
