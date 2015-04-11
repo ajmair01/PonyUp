@@ -133,6 +133,10 @@ input.error {
     float: left;
 }
 
+video {
+    margin-top: 1rem;
+}
+
 @media screen and (max-width: 360px) {
 	header h1 {
 		margin-top: 1.5rem;

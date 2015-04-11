@@ -26,6 +26,11 @@
                            ng-show="!hasGetUserMedia || cameraError || cameraDenied && !pictureUploaded">
                 </div>
                 <div id="takePicture" ng-show="hasGetUserMedia && !pictureTaken && !cameraDenied">
+                    <h3 class="left">Take Picture</h3>
+                    <span class="left" style="text-align: left">
+                        Take a picture of the horse's information from the racing program. Make sure the picture includes
+                        the horse's name and past performances, as well as the jockey's win percentage.
+                    </span>
                     <figure class="not-ready">
                         <video autoplay></video>
                     </figure>
@@ -35,10 +40,13 @@
                 </div>
             </div>
             <div class="row fieldset" id="step2" ng-show="pictureTaken || pictureUploaded">
+                <h3>How does this look?</h3>
                 <figure>
                     <canvas style="display: none"></canvas>
                     <img src=""/>
                 </figure>
+                <a href="" ng-click="acceptPicture()" class="button radius">Use This Image</a>
+                <a href="" ng-click="retake()" class="button radius">Retake</a>
             </div>
         </div>
     </div>
