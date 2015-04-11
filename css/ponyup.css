@@ -1,6 +1,10 @@
-body, h2, h4 {
+body, h2, h3, h4 {
 	font-family: 'Oswald';
 	font-weight: bold;
+}
+
+span {
+    font-weight: normal;
 }
 
 label {
