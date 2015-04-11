@@ -364,6 +364,14 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         $scope.pictureTaken = true;
     }
 
+    $scope.retake = function() {
+        $scope.pictureTaken = false;
+    }
+
+    $scope.imageUpload = function() {
+        alert('image uploaded');
+    }
+
     checkRequirements()
     .then(searchForRearCamera)
     .then(setupVideo)

@@ -23,6 +23,7 @@
                         includes the horse's name, jockey's win percentage, and the horse's past performances.
                     </span>
                     <input type="file" capture="camera" accept="image/*"
+                           onchange="angular.element(this).scope().imageUpload()"
                            ng-show="!hasGetUserMedia || cameraError || cameraDenied && !pictureUploaded">
                 </div>
                 <div id="takePicture" ng-show="hasGetUserMedia && !pictureTaken && !cameraDenied">
