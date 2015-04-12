@@ -12,10 +12,10 @@
             <div class="row fieldset error" ng-show="cameraError">
                 <span>There was an error accessing your camera: {{cameraErrorMsg}}</span>
             </div>
-            <div class="row fieldset error" ng-show="cameraDenied" ng-hide="pictureUploaded">
+            <div class="row fieldset error" ng-show="cameraDenied && !pictureUploaded">
                 <span>Camera access denied. You can upload an image below or go back to enter data manually.</span>
             </div>
-            <div class="row fieldset" id="step1" ng-hide="pictureUploaded" ng-show="!pictureTaken && setupComplete || cameraError || cameraDenied">
+            <div class="row fieldset" id="step1" ng-show="!pictureTaken && setupComplete || ((cameraError || cameraDenied) && !pictureUploaded)">
                 <div id="upload" ng-show="cameraError || cameraDenied">
                     <h3 class="left">Upload Image</h3>
                     <span class="left" style="text-align: left">
