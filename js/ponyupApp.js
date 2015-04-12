@@ -221,6 +221,7 @@ ponyupApp.controller('resultCtrl', function($scope, $log, $routeParams) {
 
 ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
     var video = document.querySelector('video');
+    var image = null;
 
     var pictureWidth = 640;
     var pictureHeight = 360;
@@ -368,8 +369,61 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         $scope.pictureTaken = false;
     }
 
-    $scope.imageUpload = function() {
-        alert('image uploaded');
+    $scope.reupload = function() {
+        $scope.pictureUploaded = false;
+    }
+
+    $scope.imageUpload = function(files, scope) {
+        readData(files[0])
+        .then(function () {
+            var img = document.querySelector('#step2 img');
+            var canvas = document.querySelector('#step2 canvas');
+
+            canvas.width = pictureWidth;
+            canvas.height = pictureHeight;
+
+            var ctx = canvas.getContext('2d');
+
+            ctx.drawImage(img, 0, 0);
+
+            texture = fxCanvas.texture(canvas);
+            fxCanvas.draw(texture)
+            .hueSaturation(-1, -1)
+            .unsharpMask(20, 2)
+            .brightnessContrast(0.2, 0.9)
+            .update();
+
+            window.texture = texture;
+            window.fxCanvas = fxCanvas;
+
+            $(img)
+            .attr('src', fxCanvas.toDataURL());
+
+            $scope.pictureUploaded = true;
+        })
+    }
+
+    var readData = function(file) {
+        var deferred = $q.defer();
+        var reader = new FileReader();
+
+        reader.onload = function() {
+            var img = document.querySelector('#step2 img');
+
+            img.onload = function() {
+                setTimeout(function() {
+                    pictureWidth = img.width;
+                    pictureHeight = img.height;
+                    deferred.resolve();
+                }, 1000);
+            }
+
+            $(img).attr('src', reader.result);
+        }
+
+        reader.readAsDataURL(file);
+
+        return deferred.promise;
     }
 
     checkRequirements()

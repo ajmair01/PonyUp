@@ -12,10 +12,10 @@
             <div class="row fieldset error" ng-show="cameraError">
                 <span>There was an error accessing your camera: {{cameraErrorMsg}}</span>
             </div>
-            <div class="row fieldset error" ng-show="cameraDenied">
+            <div class="row fieldset error" ng-show="cameraDenied" ng-hide="pictureUploaded">
                 <span>Camera access denied. You can upload an image below or go back to enter data manually.</span>
             </div>
-            <div class="row fieldset" id="step1" ng-show="!pictureTaken && setupComplete || cameraError || cameraDenied">
+            <div class="row fieldset" id="step1" ng-hide="pictureUploaded" ng-show="!pictureTaken && setupComplete || cameraError || cameraDenied">
                 <div id="upload" ng-show="cameraError || cameraDenied">
                     <h3 class="left">Upload Image</h3>
                     <span class="left" style="text-align: left">
@@ -23,7 +23,7 @@
                         includes the horse's name, jockey's win percentage, and the horse's past performances.
                     </span>
                     <input type="file" capture="camera" accept="image/*"
-                           onchange="angular.element(this).scope().imageUpload()"
+                           onchange="angular.element(this).scope().imageUpload(this.files)"
                            ng-show="!hasGetUserMedia || cameraError || cameraDenied && !pictureUploaded">
                 </div>
                 <div id="takePicture" ng-show="hasGetUserMedia && !pictureTaken && !cameraDenied">
@@ -47,7 +47,8 @@
                     <img src=""/>
                 </figure>
                 <a href="" ng-click="acceptPicture()" class="button radius">Use This Image</a>
-                <a href="" ng-click="retake()" class="button radius">Retake</a>
+                <a href="" ng-click="retake()" ng-hide="pictureUploaded" class="button radius">Retake</a>
+                <a href="" ng-click="reupload()" ng-show="pictureUploaded" class="button radius">Choose Another</a>
             </div>
         </div>
     </div>
