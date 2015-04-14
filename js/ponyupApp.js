@@ -236,7 +236,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         glfx: 'No glfx.js support',
         webgl: 'No WebGL support',
         denied: 'User denied camera access'
-    }
+    };
 
     function checkRequirements() {
         var deferred = $q.defer();
@@ -261,7 +261,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         deferred.resolve();
 
         return deferred.promise;
-    }
+    };
 
     function searchForRearCamera() {
         var deferred = $q.defer();
@@ -284,7 +284,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         }
 
         return deferred.promise;
-    }
+    };
 
     function setupVideo(rearCameraId) {
         var deferred = $q.defer();
@@ -336,7 +336,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         });
 
         return deferred.promise;
-    }
+    };
 
     $scope.takePicture = function () {
         var canvas = document.querySelector('#step2 canvas');
@@ -363,15 +363,15 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         .attr('src', fxCanvas.toDataURL());
 
         $scope.pictureTaken = true;
-    }
+    };
 
     $scope.retake = function() {
         $scope.pictureTaken = false;
-    }
+    };
 
     $scope.reupload = function() {
         $scope.pictureUploaded = false;
-    }
+    };
 
     $scope.imageUpload = function(files, scope) {
         readData(files[0])
@@ -401,7 +401,15 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
 
             $scope.pictureUploaded = true;
         })
-    }
+    };
+
+    $scope.acceptPicture = function() {
+        $('.container > img').cropper({
+            preview: '.preview'
+        });
+        $scope.pictureAccepted = true;
+        $scope.horseNameSelect = true;
+    };
 
     var readData = function(file) {
         var deferred = $q.defer();
@@ -424,7 +432,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         reader.readAsDataURL(file);
 
         return deferred.promise;
-    }
+    };
 
     checkRequirements()
     .then(searchForRearCamera)

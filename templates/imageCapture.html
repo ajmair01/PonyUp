@@ -15,7 +15,8 @@
             <div class="row fieldset error" ng-show="cameraDenied && !pictureUploaded">
                 <span>Camera access denied. You can upload an image below or go back to enter data manually.</span>
             </div>
-            <div class="row fieldset" id="step1" ng-show="!pictureTaken && setupComplete || ((cameraError || cameraDenied) && !pictureUploaded)">
+            <div class="row fieldset" id="step1"
+                 ng-show="!pictureTaken && setupComplete || ((cameraError || cameraDenied) && !pictureUploaded)">
                 <div id="upload" ng-show="cameraError || cameraDenied">
                     <h3 class="left">Upload Image</h3>
                     <span class="left" style="text-align: left">
@@ -41,14 +42,19 @@
                 </div>
             </div>
             <div class="row fieldset" id="step2" ng-show="pictureTaken || pictureUploaded">
-                <h3>How does this look?</h3>
-                <figure>
+                <h3 ng-show="!pictureAccepted">How does this look?</h3>
+                <h3 ng-show="horseNameSelect">Crop out the horse's name.</h3>
+                <figure class="container">
                     <canvas style="display: none"></canvas>
-                    <img src=""/>
+                    <img id="picStep2" src=""/>
+                    <div class="preview" ng-show="pictureAccepted" style="width: 200px; height: 200px; overflow:hidden">
+                    </div>
                 </figure>
-                <a href="" ng-click="acceptPicture()" class="button radius">Use This Image</a>
-                <a href="" ng-click="retake()" ng-hide="pictureUploaded" class="button radius">Retake</a>
-                <a href="" ng-click="reupload()" ng-show="pictureUploaded" class="button radius">Choose Another</a>
+                <a href="" ng-click="acceptPicture()" class="button radius" ng-hide="pictureAccepted">Use This Image</a>
+                <a href="" ng-click="retake()" ng-hide="pictureUploaded || pictureAccepted"
+                   class="button radius">Retake</a>
+                <a href="" ng-click="reupload()" ng-show="pictureUploaded && !pictureAccepted"
+                   class="button radius">Choose Another</a>
             </div>
         </div>
     </div>
