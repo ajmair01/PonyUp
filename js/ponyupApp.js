@@ -413,6 +413,13 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         $('.container > img').cropper(method, value);
     }
 
+    $scope.crop = function() {
+        var canvas = $('.container > img').cropper('getCroppedCanvas');
+        var img = document.querySelector('#cropped');
+        $(img).attr('src', canvas.toDataURL());
+        $scope.done = true;
+    }
+
     var readData = function(file) {
         var deferred = $q.defer();
         var reader = new FileReader();

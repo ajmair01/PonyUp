@@ -41,7 +41,7 @@
                     </a>
                 </div>
             </div>
-            <div class="row fieldset" id="step2" ng-show="pictureTaken || pictureUploaded">
+            <div class="row fieldset" id="step2" ng-show="(pictureTaken || pictureUploaded) && !done">
                 <h3 ng-show="!pictureAccepted">How does this look?</h3>
                 <h3 ng-show="horseNameSelect">Crop out the horse's name.</h3>
                 <figure class="container">
@@ -70,6 +70,10 @@
                 <div class="row" ng-show="pictureAccepted">
                     <button type="button" class="button radius" ng-click="crop()">Done</button>
                 </div>
+            </div>
+            <div class="row fieldset" ng-show="done">
+                <h3>Cropped Image</h3>
+                <img id="cropped" src="">
             </div>
         </div>
     </div>
