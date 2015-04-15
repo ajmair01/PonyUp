@@ -47,14 +47,29 @@
                 <figure class="container">
                     <canvas style="display: none"></canvas>
                     <img id="picStep2" src=""/>
-                    <div class="preview" ng-show="pictureAccepted" style="width: 200px; height: 200px; overflow:hidden">
-                    </div>
                 </figure>
                 <a href="" ng-click="acceptPicture()" class="button radius" ng-hide="pictureAccepted">Use This Image</a>
                 <a href="" ng-click="retake()" ng-hide="pictureUploaded || pictureAccepted"
                    class="button radius">Retake</a>
                 <a href="" ng-click="reupload()" ng-show="pictureUploaded && !pictureAccepted"
                    class="button radius">Choose Another</a>
+                <div class="row button-group" ng-show="pictureAccepted">
+                    <button type="button" class="button radius" ng-click="cropper('zoom', 0.1)">
+                        <i class="fa fa-search-plus fa-lg"></i>
+                    </button>
+                    <button type="button" class="button radius" ng-click="cropper('zoom', -0.1)">
+                        <i class="fa fa-search-minus fa-lg"></i>
+                    </button>
+                    <button type="button" class="button radius" ng-click="cropper('rotate', -5)">
+                        <i class="fa fa-rotate-left fa-lg"></i>
+                    </button>
+                    <button type="button" class="button radius" ng-click="cropper('rotate', 5)">
+                        <i class="fa fa-rotate-right fa-lg"></i>
+                    </button>
+                </div>
+                <div class="row" ng-show="pictureAccepted">
+                    <button type="button" class="button radius" ng-click="crop()">Done</button>
+                </div>
             </div>
         </div>
     </div>

@@ -404,12 +404,14 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
     };
 
     $scope.acceptPicture = function() {
-        $('.container > img').cropper({
-            preview: '.preview'
-        });
+        $('.container > img').cropper({});
         $scope.pictureAccepted = true;
         $scope.horseNameSelect = true;
     };
+
+    $scope.cropper = function(method, value) {
+        $('.container > img').cropper(method, value);
+    }
 
     var readData = function(file) {
         var deferred = $q.defer();
