@@ -390,7 +390,6 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
             fxCanvas.draw(texture)
             .hueSaturation(-1, -1)
             .unsharpMask(20, 2)
-            .brightnessContrast(0.2, 0.9)
             .update();
 
             window.texture = texture;
@@ -402,6 +401,21 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
             $scope.pictureUploaded = true;
         })
     };
+
+    $scope.adjustBC = function() {
+        $log.info("adjusting BC");
+        var img = document.querySelector('#step2 img');
+        var brightness = $scope.brightness / 100;
+        var contrast = $scope.contrast / 100;
+
+        fxCanvas.draw(texture)
+        .hueSaturation(-1, -1)
+        .unsharpMask(20, 2)
+        .brightnessContrast(brightness, contrast)
+        .update();
+
+        img.src = fxCanvas.toDataURL();
+    }
 
     $scope.acceptPicture = function() {
         $('.container > img').cropper({});
@@ -418,6 +432,18 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         var img = document.querySelector('#cropped');
         $(img).attr('src', canvas.toDataURL());
         $scope.done = true;
+    }
+
+    $scope.recognize = function() {
+        var img = document.querySelector('#cropped');
+        var canvas = document.querySelector('#croppedCanvas');
+        canvas.width = $(img).width();
+        canvas.height = $(img).height();
+
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        $scope.ocrtxt = OCRAD(canvas);
     }
 
     var readData = function(file) {
@@ -442,6 +468,9 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
 
         return deferred.promise;
     };
+
+    $scope.brightness = 20;
+    $scope.contrast = 90;
 
     checkRequirements()
     .then(searchForRearCamera)

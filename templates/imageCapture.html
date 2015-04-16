@@ -48,6 +48,8 @@
                     <canvas style="display: none"></canvas>
                     <img id="picStep2" src=""/>
                 </figure>
+                <p ng-show="!pictureAccepted">Brightness: <input ng-change="adjustBC()" ng-model="brightness" type="range" min="0" max="100" id="brightness" value="20"></p>
+                <p ng-show="!pictureAccepted">Contrast: <input ng-change="adjustBC()" ng-model="contrast" type="range" min="0" max="100" id="contrast" value="90"></p>
                 <a href="" ng-click="acceptPicture()" class="button radius" ng-hide="pictureAccepted">Use This Image</a>
                 <a href="" ng-click="retake()" ng-hide="pictureUploaded || pictureAccepted"
                    class="button radius">Retake</a>
@@ -73,7 +75,13 @@
             </div>
             <div class="row fieldset" ng-show="done">
                 <h3>Cropped Image</h3>
-                <img id="cropped" src="">
+                <figure>
+                    <canvas style="display: none" id="croppedCanvas"></canvas>
+                    <img id="cropped" src="">
+                </figure>
+                <button type="button" class="button radius" ng-click="recognize()">Recognize</button>
+                <h4 class="small-12 columns">Recognized Text</h4>
+                <span class="small-12 columns" ng-bind="ocrtxt"></span>
             </div>
         </div>
     </div>
