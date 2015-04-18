@@ -36,6 +36,12 @@ label {
     color: firebrick;
 }
 
+.fieldset.success {
+    background-color: #FFF;
+    border-color: #35AB50;
+    color: #35AB50;
+}
+
 header {
 	border-bottom: solid 0.4rem black;
 }

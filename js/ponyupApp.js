@@ -19,7 +19,7 @@ ponyupApp.config(['$routeProvider',
 			controller: 'resultCtrl',
 			templateUrl: 'templates/results.html'
 		}).
-        when('/imageCap', {
+        when('/imageCap/:raceId/:horseId', {
             controller: 'imageCapCtrl',
             templateUrl: 'templates/imageCapture.html'
         }).otherwise({redirectTo: '/intro'});
@@ -219,7 +219,7 @@ ponyupApp.controller('resultCtrl', function($scope, $log, $routeParams) {
 	getHorses($routeParams.raceId);
 });
 
-ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
+ponyupApp.controller('imageCapCtrl', function($scope, $q, $log, $routeParams) {
     var video = document.querySelector('video');
     var image = null;
 
@@ -237,6 +237,15 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         webgl: 'No WebGL support',
         denied: 'User denied camera access'
     };
+
+    var getHorseById = function(horseId) {
+		var horses = $scope.horses;
+		for (var i = 0; i < horses.length; i++) {
+			if (horses[i].id == horseId) {
+				return $scope.horses[i];
+			}
+		}
+	}
 
     function checkRequirements() {
         var deferred = $q.defer();
@@ -399,6 +408,7 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
             .attr('src', fxCanvas.toDataURL());
 
             $scope.pictureUploaded = true;
+            $scope.uploading = false;
         })
     };
 
@@ -446,6 +456,47 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
         $scope.ocrtxt = OCRAD(canvas);
     }
 
+    $scope.setField = function() {
+        $scope.ocrtxt = $scope.ocrtxt.trim();
+        $scope.error = false;
+        switch($scope.fieldSelect) {
+            case 'horse name':
+                $scope.selectedHorse.name = $scope.ocrtxt;
+                $scope.success = true;
+                break;
+            case 'horse number':
+                if (isNaN(parseInt($scope.ocrtxt))) {
+                    $scope.error = true;
+                    $scope.success = false;
+                    $scope.errorMsg = 'Error setting horse number: ' + $scope.ocrtxt + ' is not a number.';
+                } else {
+                    $scope.selectedHorse.id = parseInt($scope.ocrtxt);
+                    $scope.success = true;
+                }
+                break;
+            case 'jockey':
+                $scope.selectedHorse.jockey = $scope.ocrtxt;
+                $scope.success = true;
+                break;
+            case 'win percent':
+                $scope.ocrtxt = $scope.ocrtxt.replace('O', '0');
+                if (isNaN(parseFloat($scope.ocrtxt))) {
+                    $scope.error = true;
+                    $scope.success = false;
+                    $scope.errorMsg = 'Error setting win percent: ' + $scope.ocrtxt + ' is not a number.';
+                } else {
+                    $scope.selectedHorse.winPct = parseFloat($scope.ocrtxt);
+                    $scope.success = true;
+                }
+                break;
+        }
+
+        if (!$scope.error) {
+            localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
+            $scope.successMsg = 'Successfully set ' + $scope.fieldSelect + ' to ' + $scope.ocrtxt;
+        }
+    }
+
     var readData = function(file) {
         var deferred = $q.defer();
         var reader = new FileReader();
@@ -471,6 +522,11 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log) {
 
     $scope.brightness = 20;
     $scope.contrast = 90;
+
+    $scope.raceId = $routeParams.raceId;
+	$scope.horses = JSON.parse(localStorage.getItem('horses.' + $routeParams.raceId));
+	$scope.horseId = $routeParams.horseId;
+	$scope.selectedHorse = getHorseById($scope.horseId);
 
     checkRequirements()
     .then(searchForRearCamera)

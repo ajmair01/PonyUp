@@ -15,6 +15,12 @@
             <div class="row fieldset error" ng-show="cameraDenied && !pictureUploaded">
                 <span>Camera access denied. You can upload an image below or go back to enter data manually.</span>
             </div>
+            <div class="row fieldset success" ng-show="success">
+                <span>{{successMsg}}</span>
+            </div>
+            <div class="row fieldset error" ng-show="error">
+                <span>{{errorMsg}}</span>
+            </div>
             <div class="row fieldset" id="step1"
                  ng-show="!pictureTaken && setupComplete || ((cameraError || cameraDenied) && !pictureUploaded)">
                 <div id="upload" ng-show="cameraError || cameraDenied">
@@ -25,7 +31,9 @@
                     </span>
                     <input type="file" capture="camera" accept="image/*"
                            onchange="angular.element(this).scope().imageUpload(this.files)"
-                           ng-show="!hasGetUserMedia || cameraError || cameraDenied && !pictureUploaded">
+                           ng-show="!hasGetUserMedia || cameraError || cameraDenied && !pictureUploaded"
+                           ng-click="uploading = true">
+                    <i class="fa fa-spinner fa-pulse" ng-show="uploading"></i>
                 </div>
                 <div id="takePicture" ng-show="hasGetUserMedia && !pictureTaken && !cameraDenied">
                     <h3 class="left">Take Picture</h3>
@@ -43,7 +51,7 @@
             </div>
             <div class="row fieldset" id="step2" ng-show="(pictureTaken || pictureUploaded) && !done">
                 <h3 ng-show="!pictureAccepted">How does this look?</h3>
-                <h3 ng-show="horseNameSelect">Crop out the horse's name.</h3>
+                <h3 ng-show="horseNameSelect">Crop out a portion of text.</h3>
                 <figure class="container">
                     <canvas style="display: none"></canvas>
                     <img id="picStep2" src=""/>
@@ -73,15 +81,36 @@
                     <button type="button" class="button radius" ng-click="crop()">Done</button>
                 </div>
             </div>
-            <div class="row fieldset" ng-show="done">
-                <h3>Cropped Image</h3>
-                <figure>
-                    <canvas style="display: none" id="croppedCanvas"></canvas>
-                    <img id="cropped" src="">
-                </figure>
-                <button type="button" class="button radius" ng-click="recognize()">Recognize</button>
-                <h4 class="small-12 columns">Recognized Text</h4>
-                <span class="small-12 columns" ng-bind="ocrtxt"></span>
+            <div class="fieldset" ng-show="done">
+                <div class="row">
+                    <h3>Cropped Image</h3>
+                    <figure>
+                        <canvas style="display: none" id="croppedCanvas"></canvas>
+                        <img id="cropped" src="">
+                    </figure>
+                    <button type="button" class="button radius" ng-click="recognize()">Recognize</button>
+                    <button type="button" class="button radius" ng-click="done = false">Re-Crop</button>
+                </div>
+                <div class="row">
+                    <div class="small-12 columns">
+                        <div class="small-12 medium-4 medium-offset-2 columns">
+                            <label for="recognizedTxt">Recognized Text:</h4>
+                            <input id="recognizedTxt" type="text" style="text-align: center" ng-model="ocrtxt">
+                        </div>
+                        <div class="small-12 medium-4 columns end">
+                            <label for="fieldSelect">Set as:</label>
+                            <select id="fieldSelect" ng-model="fieldSelect" ng-init="fieldSelect = 'horse name'">
+                                <option value="horse name">Horse Name</option>
+                                <option value="horse number">Horse Number</option>
+                                <option value="jockey">Jockey Name</option>
+                                <option value="win percent">Jockey Win Percentage</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="button radius" ng-click="setField()">Set</button>
+                </div>
             </div>
         </div>
     </div>
