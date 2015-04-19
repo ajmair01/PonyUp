@@ -1,18 +1,38 @@
 <div>
 	<x-ponyup-topbar></x-ponyup-topbar>
 	<div class="contents">
-		<div class="row">
+        <div class="row">
 			<h2>Saved Races</h2>
-			<div class="row fieldset" ng-repeat="race in races" >
-				<h4>{{race}}</h4>
-				<a class="button radius small small-8 medium-1 columns" href="#/horses/{{race}}">Show Race</a>
-				<a class="button radius small small-8 medium-1 columns" href="#/results/{{race}}">Results</a>
-				<a class="button radius small alert small-8 medium-2 columns" ng-click="removeRace(race)">Remove Race</a>
-				<div class="medium-8 columns"></div>
+			<div class="row fieldset" ng-repeat="race in races">
+                <div class="row" style="margin-bottom: 1rem">
+                    <div class="small-12 medium-2 large-2 columns">
+                        <i style="float: left; margin-right: 1rem; display: inline-block"
+                           class="fa fa-flag-checkered fa-3x"></i>
+<!--                        <h4 style="display: inline-block">{{race}}</h4>-->
+                    </div>
+                    <div class="small-12 medium-5 large-3 columns">
+                        <span><b>Location:</b> Keeneland</span>
+                    </div>
+                    <div class="small-12 medium-5 large-2 columns">
+                        <span><b>Race Number:</b> 2</span>
+                    </div>
+                    <div class="small-6 medium-5 large-2 columns">
+                        <span><b>Date:</b> 04/17/2015</span>
+                    </div>
+                    <div class="small-6 medium-5 large-3 columns">
+                        <span><b>Poll Time:</b> 3:30 PM</span>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <a class="button radius small" href="#/horses/{{race}}">Edit Horses</a>
+                    <a class="button radius small" href="#/results/{{race}}">Results</a>
+                    <a class="button radius small alert" ng-click="removeRace(race)">Remove Race</a>
+                </div>
 			</div>
-		</div>
+        </div>
 		<div class="row">
 			<a ng-click="createNewRace()" class="button radius">Create New Race</a>
+            <a ng-click="removeAllRaces()" class="button radius">Clear All</a>
 		</div>
-	</div>
 </div>

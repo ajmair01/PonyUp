@@ -44,21 +44,59 @@ ponyupApp.directive('ponyupFooter', function() {
 
 ponyupApp.controller('ponyupCtrl', function($scope, $log) {
 	$scope.createNewRace = function() {
-		var numRaces = parseInt(localStorage.getItem('numRaces'));
-		if (!numRaces) {
-			numRaces = 1;
-		} else {
-			numRaces = numRaces + 1;
-		}
-		localStorage.setItem('numRaces', numRaces);
+		var numRaces = countRaces();
 
-		window.location.href = "#/horses/" + numRaces;
+		window.location.href = "#/horses/" + (numRaces+1);
 	}
+
+    $scope.removeAllRaces = function() {
+        var key;
+        for (var i = localStorage.length - 1; i >= 0; i--) {
+            key = localStorage.key(i);
+            $log.info('i = ' + i + ': ' + key);
+            if ((/^horses./).test(key)) {
+                $log.info('Deleting ' + key);
+                localStorage.removeItem(key);
+                getRaces();
+            }
+        }
+    }
+
+    var countRaces = function() {
+        var key;
+        var count = 0;
+        for (var i = localStorage.length - 1; i >= 0; i--) {
+            key = localStorage.key(i);
+            if ((/^horses./).test(key)) {
+                count++;
+            }
+        }
+        return count;
+    }
 
 	$scope.removeRace = function(raceId) {
 		localStorage.removeItem('horses.' + raceId);
+        renumberRaces();
 		getRaces();
 	}
+
+    var renumberRaces = function() {
+        $log.info('Renumbering...');
+        var key;
+        var index = 1;
+        for (var i = 0; i < localStorage.length; i++) {
+            key = localStorage.key(i);
+            $log.info(key);
+            if ((/^horses./).test(key)) {
+                $log.info('Matches. Setting horses.' + index + ' = ' + key);
+                if ('horses.' + index != key) {
+                    localStorage.setItem('horses.' + index, localStorage.getItem(key));
+                    localStorage.removeItem(key);
+                }
+                index++;
+            }
+        }
+    }
 
 	var getRaces = function() {
 		var races = [];
@@ -145,6 +183,11 @@ ponyupApp.controller('horsesCtrl', function($scope, $log, $routeParams, $window)
 		localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
 		window.location.href = "#/races/" + $scope.raceId + "/" + horseId;
 	}
+
+    $scope.imageCapture = function(horseId) {
+        localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
+        window.location.href = "#/imageCap/" + $scope.raceId + "/" + horseId;
+    }
 
 	$scope.calculate = function() {
 		var horses = $scope.horses;

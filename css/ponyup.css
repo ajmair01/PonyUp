@@ -156,8 +156,8 @@ video {
 		width: 7rem;
 	}
 
-	.small-img, .row h4, .button.small, .history-size {
-		float: none;
+	.small-img, .row h4, .button.small, .history-size, i {
+		float: none!important;
 	}
 
 	.history-size {
