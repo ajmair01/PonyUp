@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <a ng-click="modifyHistory(horse.id)" class="button radius small">Modify Race History</a>
+                        <button ng-click="modifyHistory(horse.id)" class="button radius small" ng-disabled="form.$invalid">Modify Race History</button>
                         <span class="history-size">History&nbsp;for&nbsp;{{horse.history.length ? horse.history.length : 0}}&nbsp;races&nbsp;specified.</span>
                     </div>
                 </ng-form>
@@ -48,8 +48,8 @@
 		</div>
 		<div class="row">
 			<a ng-click="add()" class="button radius">Add Horse</a>
-			<a ng-click="save()" class="button radius" ng-disabled="mainForm.$invalid">Save</a>
-			<a ng-click="calculate()" class="button radius">Pick the Winners</a>
+			<button ng-click="save()" class="button radius" ng-disabled="mainForm.$invalid">Save</button>
+			<button ng-click="calculate()" class="button radius" ng-disabled="mainForm.$invalid">Pick the Winners</button>
 		</div>
 	</div>
 </div>
