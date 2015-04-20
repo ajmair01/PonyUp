@@ -7,6 +7,10 @@ ponyupApp.config(['$routeProvider',
 			controller: 'ponyupCtrl',
 			templateUrl: 'templates/intro.html'
 		}).
+        when('/raceInfo/:raceId', {
+            controller: 'raceInfoCtrl',
+            templateUrl: 'templates/raceInfo.html'
+        }).
 		when('/horses/:raceId', {
 			controller: 'horsesCtrl',
 			templateUrl: 'templates/horsesForm.html'
@@ -45,8 +49,7 @@ ponyupApp.directive('ponyupFooter', function() {
 ponyupApp.controller('ponyupCtrl', function($scope, $log) {
 	$scope.createNewRace = function() {
 		var numRaces = countRaces();
-
-		window.location.href = "#/horses/" + (numRaces+1);
+		window.location.href = "#/raceInfo/" + (numRaces+1);
 	}
 
     $scope.removeAllRaces = function() {
@@ -54,7 +57,7 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
         for (var i = localStorage.length - 1; i >= 0; i--) {
             key = localStorage.key(i);
             $log.info('i = ' + i + ': ' + key);
-            if ((/^horses./).test(key)) {
+            if ((/^race./).test(key)) {
                 $log.info('Deleting ' + key);
                 localStorage.removeItem(key);
                 getRaces();
@@ -67,7 +70,7 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
         var count = 0;
         for (var i = localStorage.length - 1; i >= 0; i--) {
             key = localStorage.key(i);
-            if ((/^horses./).test(key)) {
+            if ((/^race./).test(key)) {
                 count++;
             }
         }
@@ -75,7 +78,7 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
     }
 
 	$scope.removeRace = function(raceId) {
-		localStorage.removeItem('horses.' + raceId);
+		localStorage.removeItem('race.' + raceId);
         renumberRaces();
 		getRaces();
 	}
@@ -87,10 +90,10 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
         for (var i = 0; i < localStorage.length; i++) {
             key = localStorage.key(i);
             $log.info(key);
-            if ((/^horses./).test(key)) {
-                $log.info('Matches. Setting horses.' + index + ' = ' + key);
-                if ('horses.' + index != key) {
-                    localStorage.setItem('horses.' + index, localStorage.getItem(key));
+            if ((/^race./).test(key)) {
+                $log.info('Matches. Setting race.' + index + ' = ' + key);
+                if ('race.' + index != key) {
+                    localStorage.setItem('race.' + index, localStorage.getItem(key));
                     localStorage.removeItem(key);
                 }
                 index++;
@@ -100,11 +103,10 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
 
 	var getRaces = function() {
 		var races = [];
-		for (i in localStorage) {
-			if (i.indexOf("horses") > -1) {
-				var raceNum = parseInt(i.substring(7, i.length));
-				$log.info("raceNum = " + raceNum);
-				races.push(raceNum);
+		for (key in localStorage) {
+			if ((/^race./).test(key)) {
+				var race = JSON.parse(localStorage.getItem(key));
+				races.push(race);
 			}
 		}
 
@@ -115,21 +117,29 @@ ponyupApp.controller('ponyupCtrl', function($scope, $log) {
 	getRaces();
 });
 
+ponyupApp.controller('raceInfoCtrl', function($scope, $log, $routeParams) {
+    $scope.raceId = $routeParams.raceId;
+    $scope.race = JSON.parse(localStorage.getItem('race.' + $scope.raceId));
+
+    $scope.saveInfo = function() {
+        $scope.race.id = $scope.raceId;
+
+        localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
+        window.location.href = '#/intro';
+    }
+});
+
 ponyupApp.controller('horsesCtrl', function($scope, $log, $routeParams, $window) {
 	$scope.raceId = $routeParams.raceId;
-
-	var getHorses = function(raceId) {
-		var horses = localStorage.getItem('horses.' + raceId);
-		if (!horses) {
-			$scope.horses = [
-				{
-					id: 1
-				}
-			];
-		} else {
-			$scope.horses = JSON.parse(horses);
-		}
-	}
+    $scope.race = JSON.parse(localStorage.getItem('race.' + $scope.raceId));
+    if (!$scope.race.horses) {
+        $scope.race.horses = [
+            {
+                id: 1
+            }
+        ];
+    }
+    $scope.horses = $scope.race.horses;
 
 	var calcHorseAvg = function(horse) {
 		var winPct = parseFloat(horse.winPct);
@@ -174,18 +184,20 @@ ponyupApp.controller('horsesCtrl', function($scope, $log, $routeParams, $window)
 	}
 
 	$scope.save = function() {
-		localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
-		$scope.success = true;
-		$window.scrollTo(0,0);
+        if ($scope.mainForm.$valid) {
+            localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
+            $scope.success = true;
+            $window.scrollTo(0,0);
+        }
 	}
 
 	$scope.modifyHistory = function(horseId) {
-		localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
+		localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
 		window.location.href = "#/races/" + $scope.raceId + "/" + horseId;
 	}
 
     $scope.imageCapture = function(horseId) {
-        localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
+        localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
         window.location.href = "#/imageCap/" + $scope.raceId + "/" + horseId;
     }
 
@@ -195,16 +207,13 @@ ponyupApp.controller('horsesCtrl', function($scope, $log, $routeParams, $window)
 			var curHorse = horses[i];
 			calcHorseAvg(curHorse);
 		}
-		localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
+		localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
 		window.location.href = "#/results/" + $scope.raceId;
 	}
-
-	getHorses($scope.raceId);
 });
 
 ponyupApp.controller('raceHistoryCtrl', function($scope, $log, $routeParams) {
-
-	var getHorseById = function(horseId) {
+    var getHorseById = function(horseId) {
 		var horses = $scope.horses;
 		for (var i = 0; i < horses.length; i++) {
 			if (horses[i].id == horseId) {
@@ -213,26 +222,21 @@ ponyupApp.controller('raceHistoryCtrl', function($scope, $log, $routeParams) {
 		}
 	}
 
-	$scope.addRace = function() {
-		var selectedHorse = getHorseById($scope.horseId);
-		selectedHorse.history.push({id: selectedHorse.history.length + 1});
-	}
-
-	$scope.save = function() {
-		localStorage.setItem('horses.' + $scope.raceId, JSON.stringify($scope.horses));
-		window.location.href = "#/horses/" + $scope.raceId;
-	}
-
-	$scope.raceId = $routeParams.raceId;
-	$scope.horses = JSON.parse(localStorage.getItem('horses.' + $routeParams.raceId));
-	$scope.horseId = $routeParams.horseId;
-	var selectedHorse = getHorseById($scope.horseId);
+    $scope.raceId = $routeParams.raceId;
+    $scope.horseId = $routeParams.horseId;
+    $scope.race = JSON.parse(localStorage.getItem('race.' + $scope.raceId));
+    $scope.horses = $scope.race.horses;
+    var selectedHorse = getHorseById($scope.horseId);
 	if (!selectedHorse.history) {
-		selectedHorse.history = [
-			{ id: 1 }
-		];
-	}
-	$scope.distTypeOptions = [
+        selectedHorse.history = [
+            {
+                id: 1
+            }
+        ]
+    }
+    $scope.selectedHorse = selectedHorse;
+
+    $scope.distTypeOptions = [
 		{
 			abbr: 'F',
 			name: 'Furlongs',
@@ -243,23 +247,26 @@ ponyupApp.controller('raceHistoryCtrl', function($scope, $log, $routeParams) {
 		}
 	];
 
+	$scope.addRace = function() {
+		selectedHorse.history.push({id: $scope.selectedHorse.history.length + 1});
+	}
+
+	$scope.save = function() {
+        if ($scope.mainForm.$valid) {
+            localStorage.setItem('race.' + $scope.raceId, JSON.stringify($scope.race));
+            window.location.href = "#/horses/" + $scope.raceId;
+        }
+	}
+
 });
 
 ponyupApp.controller('resultCtrl', function($scope, $log, $routeParams) {
-	var getHorses = function(raceId) {
-		var horses = localStorage.getItem('horses.' + raceId);
-		if (!horses) {
-			$scope.horses = [
-				{
-					id: 1
-				}
-			];
-		} else {
-			$scope.horses = JSON.parse(horses);
-		}
-	}
-
-	getHorses($routeParams.raceId);
+    $scope.race = JSON.parse(localStorage.getItem('race.' + $routeParams.raceId));
+    $scope.horses = $scope.race.horses;
+    if (!$scope.horses) {
+        $scope.error = true;
+        $scope.errorMsg = 'The results for this race have not yet been calculated. Do so by clicking the Pick the Winners button on the Edit Horses page.';
+    }
 });
 
 ponyupApp.controller('imageCapCtrl', function($scope, $q, $log, $routeParams) {
@@ -567,7 +574,8 @@ ponyupApp.controller('imageCapCtrl', function($scope, $q, $log, $routeParams) {
     $scope.contrast = 90;
 
     $scope.raceId = $routeParams.raceId;
-	$scope.horses = JSON.parse(localStorage.getItem('horses.' + $routeParams.raceId));
+	$scope.race = JSON.parse(localStorage.getItem('race.' + $routeParams.raceId));
+    $scope.horses = $scope.race.horses;
 	$scope.horseId = $routeParams.horseId;
 	$scope.selectedHorse = getHorseById($scope.horseId);
 

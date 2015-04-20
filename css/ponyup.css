@@ -131,6 +131,10 @@ input.error {
     border-color: #f04124 !important;
 }
 
+select.error {
+    border-color: #f04124 !important;
+}
+
 .right {
     float: right;
 }

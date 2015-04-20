@@ -1,0 +1,35 @@
+<div>
+	<x-ponyup-topbar></x-ponyup-topbar>
+	<div class="contents">
+        <div class="row">
+            <h2>Race Information</h2>
+            <div class="row fieldset">
+                <form name="form">
+                    <div class="small-12 columns">
+                        <label for="location">Location:</label>
+                        <input type="text" name="location" id="location" ng-model="race.location" required ng-class="{error: form.location.$invalid}">
+                        <small class="error" ng-show="form.location.$error.required">Please enter a location</small>
+                    </div>
+                    <div class="small-12 columns">
+                        <label for="date">Date:</label>
+                        <input type="text" id="date" name="date" ng-model="race.date" placeholder="mm/dd/yyyy" required ng-class="{error: form.date.$invalid}">
+                        <small class="error" ng-show="form.date.$error.required">Please enter a date</small>
+                    </div>
+                    <div class="small-12 columns">
+                        <label for="time">Post Time:</label>
+                        <input type="text" name="time" id="time" ng-model="race.time" placeholder="hh:mm AM/PM" required ng-class="{error: form.time.$invalid}">
+                        <small class="error" ng-show="form.time.$error.required">Please enter a time</small>
+                    </div>
+                    <div class="small-12 columns">
+                        <label for="number">Race Number:</label>
+                        <input type="number" name="number" id="number" ng-model="race.number" min="1" ng-class="{error: form.number.$invalid}" required>
+                        <small class="error" ng-show="form.number.$error.number">Not a number</small>
+                        <small class="error" ng-show="form.number.$error.required">Please enter a number</small>
+                    </div>
+                    <a class="button radius" ng-click="saveInfo()" ng-disabled="form.$invalid">Save</a>
+                    <a class="button radius" href="#/intro">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

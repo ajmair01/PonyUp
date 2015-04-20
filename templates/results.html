@@ -3,7 +3,12 @@
 	<div class="contents">
 		<div class="row">
 			<h2>Results</h2>
-			<div class="table-div">
+            <div class="row fieldset info" ng-show="error">
+                <span>
+                    {{errorMsg}}
+                </span>
+            </div>
+			<div class="table-div" ng-show="!error">
 				<table>
 					<tr>
 						<th>Predicted Finish</th>

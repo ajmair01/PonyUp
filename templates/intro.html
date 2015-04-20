@@ -8,26 +8,25 @@
                     <div class="small-12 medium-2 large-2 columns">
                         <i style="float: left; margin-right: 1rem; display: inline-block"
                            class="fa fa-flag-checkered fa-3x"></i>
-<!--                        <h4 style="display: inline-block">{{race}}</h4>-->
                     </div>
                     <div class="small-12 medium-5 large-3 columns">
-                        <span><b>Location:</b> Keeneland</span>
+                        <span><b>Location:</b> {{race.location}}</span>
                     </div>
                     <div class="small-12 medium-5 large-2 columns">
-                        <span><b>Race Number:</b> 2</span>
+                        <span><b>Race Number:</b> {{race.number}}</span>
                     </div>
                     <div class="small-6 medium-5 large-2 columns">
-                        <span><b>Date:</b> 04/17/2015</span>
+                        <span><b>Date:</b> {{race.date}}</span>
                     </div>
                     <div class="small-6 medium-5 large-3 columns">
-                        <span><b>Poll Time:</b> 3:30 PM</span>
+                        <span><b>Post Time:</b> {{race.time}}</span>
                     </div>
-
                 </div>
                 <div class="row">
-                    <a class="button radius small" href="#/horses/{{race}}">Edit Horses</a>
-                    <a class="button radius small" href="#/results/{{race}}">Results</a>
-                    <a class="button radius small alert" ng-click="removeRace(race)">Remove Race</a>
+                    <a class="button radius small" href="#/raceInfo/{{race.id}}">Edit Race Info</a>
+                    <a class="button radius small" href="#/horses/{{race.id}}">Edit Horses</a>
+                    <a class="button radius small" href="#/results/{{race.id}}">Results</a>
+                    <a class="button radius small alert" ng-click="removeRace(race.id)">Remove Race</a>
                 </div>
 			</div>
         </div>
