@@ -8,25 +8,63 @@
                     {{errorMsg}}
                 </span>
             </div>
+            <a href="#/intro" class="button radius" ng-show="error">Go Back</a>
 			<div class="table-div" ng-show="!error">
-				<table>
-					<tr>
+				<div class="row">
+                    <span>Predicted finish: </span>
+                </div>
+                <div class="row">
+                    <span ng-repeat="horse in horses | orderBy: 'avgTimeWithJockey'">
+                        <span>#{{horse.id}}</span>
+                        <span ng-if="$index < horses.length - 1">&rarr;</span>
+                    </span>
+                </div>
+                <table class="show-medium-up">
+					<thead>
 						<th>Predicted Finish</th>
 						<th>Number</th>
-						<th class="show-for-medium-up">Name</th>
+						<th>Name</th>
 						<th>Avg Mile Time</th>
-						<th class="show-for-medium-up">Jockey Win %</th>
+						<th>Jockey Win %</th>
 						<th>Avg Time with Jockey</th>
-					</tr>
-					<tr ng-repeat="horse in horses | orderBy: 'avgTimeWithJockey'">
-						<td>{{$index+1}}</td>
-						<td>#{{horse.id}}</td>
-						<td class="show-for-medium-up">{{horse.name}}</td>
-						<td>{{horse.avgTime}}</td>
-						<td class="show-for-medium-up">{{horse.winPct}}</td>
-						<td>{{horse.avgTimeWithJockey}}</td>
-					</tr>
+					</thead>
+                    <tbody>
+                        <tr ng-repeat="horse in horses | orderBy: 'avgTimeWithJockey'">
+                            <td>{{finish($index+1)}}</td>
+                            <td>#{{horse.id}}</td>
+                            <td>{{horse.name}}</td>
+                            <td>{{horse.avgTime.toFixed(2)}}</td>
+                            <td>{{horse.winPct}}</td>
+                            <td>{{horse.avgTimeWithJockey.toFixed(2)}}</td>
+                        </tr>
+                    </tbody>
 				</table>
+
+                <table class="hide-medium-up" ng-repeat="horse in horses | orderBy: 'avgTimeWithJockey'">
+                    <thead>
+                        <th style="font-weight: normal">
+                            <span style="font-weight: bold">Horse Number:</span>
+                            <span style="margin-right: 0.5rem">{{horse.id}}</span>
+                            <span style="font-weight: bold">Predicted Finish:</span>
+                            <span style="margin-right: 0.5rem">{{finish($index+1)}}</span>
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Name:</b> {{horse.name}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Avg Mile Time:</b> {{horse.avgTime.toFixed(2)}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Jockey Win Percent:</b> {{horse.winPct}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Avg Time with Jockey:</b> {{horse.avgTimeWithJockey.toFixed(2)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="#/intro" class="button radius">Done</a>
 			</div>
 		</div>
 	</div>

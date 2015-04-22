@@ -13,6 +13,17 @@ label {
 
 .table-div {
 	text-align: center;
+    float: none;
+}
+
+table {
+    width: 90%;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+
+td {
+    font-weight: normal;
 }
 
 .fieldset {
@@ -145,6 +156,24 @@ select.error {
 
 video {
     margin-top: 1rem;
+}
+
+@media screen and (max-width: 640px) {
+    .hide-medium-up {
+        display: table!important;
+    }
+    .show-medium-up {
+        display: none!important;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    .hide-medium-up {
+        display: none!important;
+    }
+    .show-medium-up {
+        display: table!important;
+    }
 }
 
 @media screen and (max-width: 360px) {

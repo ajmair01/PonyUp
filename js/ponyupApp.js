@@ -267,6 +267,21 @@ ponyupApp.controller('resultCtrl', function($scope, $log, $routeParams) {
         $scope.error = true;
         $scope.errorMsg = 'The results for this race have not yet been calculated. Do so by clicking the Pick the Winners button on the Edit Horses page.';
     }
+
+    $scope.finish = function (place) {
+        var numstr = place + "";
+        var length = numstr.length;
+        var lastDigit = numstr[length-1];
+        if (lastDigit == '1'){
+            return place + "st";
+        } else if (lastDigit == '2') {
+            return place + "nd";
+        } else if (lastDigit == '3') {
+            return place + "rd";
+        } else {
+            return place + "th";
+        }
+    }
 });
 
 ponyupApp.controller('imageCapCtrl', function($scope, $q, $log, $routeParams) {
