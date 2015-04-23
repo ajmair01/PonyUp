@@ -2,7 +2,7 @@
 	<x-ponyup-topbar></x-ponyup-topbar>
 	<div class="contents">
 		<div class="row">
-			<h2>#{{horse.id}} - {{horse.name}}'s Race History</h2>
+			<h2>#{{selectedHorse.id}} - {{selectedHorse.name}}'s Race History</h2>
             <form name="mainForm" data-main-form>
                 <div class="row fieldset" ng-repeat="race in selectedHorse.history">
                     <ng-form name="form" data-child-form>
